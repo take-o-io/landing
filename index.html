@@ -138,6 +138,14 @@ footer{border-top:1px solid var(--line);padding:16px clamp(20px,4vw,52px);displa
 .dd .ck{margin-left:auto;visibility:hidden}
 .dd button.on .ck{visibility:visible}
 @media (max-width:520px){.copyline{display:none}}
+
+/* --- nav CTA: scroll + highlight --- */
+body.cta-focus::before{content:'';position:fixed;inset:0;background:rgba(20,20,19,.58);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);z-index:50;pointer-events:auto;animation:ovl-in 280ms var(--ease) forwards}
+[data-theme="light"] body.cta-focus::before{background:rgba(250,249,245,.58)}
+@keyframes ovl-in{from{opacity:0}to{opacity:1}}
+body.cta-focus #waitlist{position:relative;z-index:51}
+body.cta-focus #waitlist input:focus{border-color:var(--fg);box-shadow:0 0 0 3px rgba(250,249,245,.18);outline:none}
+[data-theme="light"] body.cta-focus #waitlist input:focus{box-shadow:0 0 0 3px rgba(20,20,19,.15)}
 </style>
 </head>
 <body>
@@ -157,7 +165,7 @@ footer{border-top:1px solid var(--line);padding:16px clamp(20px,4vw,52px);displa
   <a class="wm-a" href="/" aria-label="take-o.io">
     <svg class="wm mark" viewBox="-20 -750 4220 765" role="img" aria-label="take-o.io"><use href="#wm"/></svg>
   </a>
-  <a class="btn" href="#lista" data-i="cta"></a>
+  <a class="btn" href="#waitlist" data-i="cta" id="nav-cta"></a>
 </nav>
 
 <div class="stage">
@@ -304,6 +312,31 @@ document.getElementById('waitlist').addEventListener('submit', async e => {
   document.querySelector('.micro').style.display='none';
   document.querySelector('.legal').style.display='none';
   document.getElementById('form-ok').style.display='block';
+  document.body.classList.remove('cta-focus');
+  if (ctaDismiss) { document.body.removeEventListener('click', ctaDismiss); ctaDismiss = null; }
+});
+
+// Nav CTA → smooth scroll + highlight email field
+var ctaDismiss = null;
+document.getElementById('nav-cta').addEventListener('click', function(e) {
+  e.preventDefault();
+  var form = document.getElementById('waitlist');
+  if (form.style.display === 'none') return; // already submitted
+  var input = form.querySelector('input[type="email"]');
+  if (document.body.classList.contains('cta-focus')) { input.focus(); return; }
+  input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  setTimeout(function() {
+    input.focus();
+    document.body.classList.add('cta-focus');
+    ctaDismiss = function(ev) {
+      if (!ev.target.closest('#waitlist')) {
+        document.body.classList.remove('cta-focus');
+        document.body.removeEventListener('click', ctaDismiss);
+        ctaDismiss = null;
+      }
+    };
+    document.body.addEventListener('click', ctaDismiss);
+  }, 480);
 });
 
 applyLang(); applyTheme();
