@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark light">
+<title>Privacy Notice — take-o.io</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500&display=swap" rel="stylesheet">
+<style>
+:root{--t:200ms cubic-bezier(.2,0,0,1)}
+[data-theme="dark"]{--bg:#141413;--fg:#FAF9F5;--soft:#B9B7B0;--mute:#8A8984;--line:#262624}
+[data-theme="light"]{--bg:#FAF9F5;--fg:#141413;--soft:#5A5955;--mute:#8A8984;--line:#EDEBE3}
+*{margin:0;padding:0;box-sizing:border-box}
+html{background:var(--bg)}
+body{font-family:'General Sans',system-ui,sans-serif;background:var(--bg);color:var(--fg);transition:background var(--t),color var(--t);-webkit-font-smoothing:antialiased;min-height:100vh;min-height:100dvh}
+.wrap{max-width:620px;margin:0 auto;padding:48px 24px 80px}
+a{color:var(--fg)}
+.back{font-size:13px;color:var(--mute);text-decoration:none}
+.back:hover{color:var(--soft)}
+h1{font-size:26px;font-weight:500;margin-top:28px}
+.upd{font-size:13px;color:var(--mute);margin-top:6px}
+h2{font-size:15px;font-weight:500;margin-top:28px}
+p{font-size:14.5px;line-height:1.65;color:var(--soft);margin-top:8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="/" id="back">←</a>
+<div data-l="pt" style="display:none">
+  <h1>Aviso de Privacidade</h1>
+  <p class="upd">Última atualização: julho de 2026</p>
+  <h2>Quem somos</h2><p>take-o.io. Contato para assuntos de privacidade: fantunes@take-o.io.</p>
+  <h2>O que coletamos</h2><p>Apenas o e-mail que você informa ao entrar na lista de espera, além de dados técnicos básicos de acesso (endereço IP e navegador), registrados automaticamente pelos nossos provedores de hospedagem.</p>
+  <h2>Para que usamos</h2><p>Para avisar quando o acesso antecipado abrir e enviar atualizações ocasionais sobre o produto. Nada além disso.</p>
+  <h2>Base legal</h2><p>Consentimento (LGPD, art. 7º, I), manifestado quando você envia seu e-mail.</p>
+  <h2>Com quem compartilhamos</h2><p>Com os serviços que operam a infraestrutura: Resend (envio de e-mail) e Vercel (hospedagem). Não vendemos nem cedemos seus dados a terceiros.</p>
+  <h2>Por quanto tempo</h2><p>Até você pedir a remoção. Todo e-mail que enviamos tem link de descadastro.</p>
+  <h2>Seus direitos</h2><p>Você pode solicitar acesso, correção ou exclusão dos seus dados, e revogar o consentimento a qualquer momento, escrevendo para fantunes@take-o.io.</p>
+</div>
+<div data-l="en">
+  <h1>Privacy Notice</h1>
+  <p class="upd">Last updated: July 2026</p>
+  <h2>Who we are</h2><p>take-o.io. Privacy contact: fantunes@take-o.io.</p>
+  <h2>What we collect</h2><p>Only the email you provide when joining the waitlist, plus basic technical access data (IP address and browser) logged automatically by our hosting providers.</p>
+  <h2>How we use it</h2><p>To let you know when early access opens and to send occasional product updates. Nothing else.</p>
+  <h2>Legal basis</h2><p>Consent, given when you submit your email.</p>
+  <h2>Who we share it with</h2><p>The services running our infrastructure: Resend (email delivery) and Vercel (hosting). We never sell or hand your data to third parties.</p>
+  <h2>How long we keep it</h2><p>Until you ask us to remove it. Every email we send includes an unsubscribe link.</p>
+  <h2>Your rights</h2><p>You can request access, correction or deletion of your data, and withdraw consent at any time, by writing to fantunes@take-o.io.</p>
+</div>
+</div>
+<script>
+const lang = localStorage.getItem('lang') || 'en';
+const theme = localStorage.getItem('theme') || 'dark';
+const mq = window.matchMedia('(prefers-color-scheme: dark)');
+document.documentElement.dataset.theme = theme==='system' ? (mq.matches?'dark':'light') : theme;
+document.documentElement.lang = lang==='pt' ? 'pt-BR' : 'en';
+document.title = lang==='pt' ? 'Aviso de Privacidade — take-o.io' : 'Privacy Notice — take-o.io';
+document.querySelectorAll('[data-l]').forEach(d => d.style.display = d.dataset.l===lang ? 'block' : 'none');
+</script>
+</body>
+</html>

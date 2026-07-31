@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark light">
+<title>take-o.io — production intelligence for film and TV</title>
+<meta name="description" content="AI platform that turns screenplays into structured production data. Automatic script breakdown and technical analysis for production companies. Early access.">
+<meta property="og:title" content="take-o.io — from script to budget, in minutes">
+<meta property="og:description" content="Script breakdown and technical analysis covering the entire screenplay. Scene by scene, line by line.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://take-o.io">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://api.fontshare.com">
+<link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600&display=swap" rel="stylesheet">
+<style>
+:root{--t-fast:120ms;--t-base:200ms;--ease:cubic-bezier(.2,0,0,1)}
+[data-theme="dark"]{
+  --bg:#141413;--fg:#FAF9F5;--fg-soft:#B9B7B0;--fg-mute:#8A8984;
+  --line:#262624;--ctl:#3A3A37;--card:#1E1E1C;--card-on:#333330;--pop:#1E1E1C;
+  --btn-bg:#FAF9F5;--btn-fg:#141413;--sheet:#FAF9F5;--sheet-ink:#141413;
+}
+[data-theme="light"]{
+  --bg:#FAF9F5;--fg:#141413;--fg-soft:#5A5955;--fg-mute:#8A8984;
+  --line:#EDEBE3;--ctl:#D9D6CC;--card:#F5F3EC;--card-on:#FFFFFF;--pop:#FFFFFF;
+  --btn-bg:#141413;--btn-fg:#FAF9F5;--sheet:#FFFFFF;--sheet-ink:#141413;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{height:100%;background:var(--bg)}
+body{font-family:'General Sans',system-ui,sans-serif;background:var(--bg);color:var(--fg);-webkit-font-smoothing:antialiased;transition:background var(--t-base) var(--ease),color var(--t-base) var(--ease);display:flex;flex-direction:column;min-height:100%;min-height:100vh;min-height:100dvh}
+.mark use{fill:url(#brushed)}
+[data-theme="light"] .mark use{fill:url(#oil)}
+a{color:inherit}
+
+.nav{display:flex;align-items:center;justify-content:space-between;padding:22px clamp(20px,4vw,52px);flex:none}
+.nav .wm-a{display:block;line-height:0}
+.nav .wm{height:24px}
+.btn{display:inline-block;background:var(--btn-bg);color:var(--btn-fg);border:none;border-radius:10px;padding:10px 19px;font:inherit;font-size:13.5px;font-weight:500;cursor:pointer;text-decoration:none;transition:opacity var(--t-fast) var(--ease);white-space:nowrap}
+.btn:hover{opacity:.88}
+
+.stage{flex:1;display:flex;align-items:center;min-height:0}
+.split{width:100%;max-width:1240px;margin:0 auto;padding:0 clamp(20px,4vw,52px);display:grid;grid-template-columns:1.05fr 1fr;gap:clamp(28px,5vw,64px);align-items:center}
+@media (max-width:860px){.split{grid-template-columns:1fr;gap:36px;padding-top:8px;padding-bottom:8px}}
+
+.col-l{min-width:0}
+h1{font-weight:500;font-size:clamp(27px,3.3vw,42px);line-height:1.16;letter-spacing:-.015em}
+.sub{margin-top:18px;font-size:clamp(14.5px,1.4vw,16.5px);line-height:1.6;color:var(--fg-soft);max-width:46ch}
+.cta-row{margin-top:28px;display:flex;gap:9px;flex-wrap:wrap;max-width:440px}
+.cta-row input{flex:1;min-width:200px;background:transparent;border:1px solid var(--ctl);border-radius:11px;padding:13px 15px;font:inherit;font-size:14.5px;color:var(--fg);outline:none;transition:border-color var(--t-fast) var(--ease)}
+.cta-row input::placeholder{color:var(--fg-mute)}
+.cta-row input:focus{border-color:var(--fg-mute)}
+.cta-row input:focus-visible,.btn:focus-visible,.seg button:focus-visible,.lang-b:focus-visible,a:focus-visible{outline:2px solid var(--fg);outline-offset:2px}
+.micro{margin-top:13px;font-size:12.5px;color:var(--fg-mute)}
+.legal{margin-top:6px;font-size:11.5px}
+.legal a{color:var(--fg-mute);text-decoration:underline;text-underline-offset:2px}
+.legal a:hover{color:var(--fg-soft)}
+.form-ok{margin-top:16px;font-size:14px;color:var(--fg-soft);display:none;max-width:40ch}
+
+.col-r{min-width:0}
+.viz-frame{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:clamp(16px,2vw,24px);transition:background var(--t-base) var(--ease)}
+.viz-bar{display:flex;gap:5px;margin-bottom:16px}
+.viz-bar i{width:8px;height:8px;border-radius:99px;background:var(--ctl);display:block}
+.viz-inner{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:clamp(14px,1.8vw,20px);transition:background var(--t-base) var(--ease)}
+.sheet{width:98px;flex:none;aspect-ratio:8.5/11;border-radius:2px;background:var(--sheet);padding:9px 8px;border:1px solid var(--line)}
+.sheet i{display:block;border-radius:1.2px;background:var(--sheet-ink);transition:opacity .3s var(--ease)}
+.sheet .h{height:2.6px;opacity:.5}
+.sheet .h.lit{opacity:.85}
+.sheet .b{height:1.6px;opacity:.15;margin-top:2.6px}
+.sheet .b.lit,.sheet .d.lit{opacity:.4}
+.sheet .c{height:2px;opacity:.3;margin:4.6px auto 1.8px;width:24%}
+.sheet .c.lit{opacity:.62}
+.sheet .d{height:1.6px;opacity:.15;margin:2.6px 0 0 22%}
+.viz-in{display:flex;gap:14px;align-items:flex-start}
+.rows{flex:1;display:flex;flex-direction:column;gap:6.5px;min-width:0}
+.rw{display:flex;align-items:center;gap:8px;height:20px;padding:0 8px;border-radius:5px;border:1.5px solid transparent;opacity:.3;transition:opacity .28s var(--ease)}
+.rw.lit{opacity:1}
+.rw .nu{font-family:'Courier New',Courier,monospace;font-size:11px}
+.rw .lc{height:5px;border-radius:2.5px;opacity:.45}
+[data-theme="dark"] .rw.id{background:#FAF9F5}[data-theme="dark"] .rw.id .nu{color:#141413}[data-theme="dark"] .rw.id .lc{background:#141413}
+[data-theme="dark"] .rw.ed{border-color:#FAF9F5}[data-theme="dark"] .rw.ed .nu{color:#FAF9F5}[data-theme="dark"] .rw.ed .lc{background:#FAF9F5}
+[data-theme="dark"] .rw.en{border-color:#6B6B67}[data-theme="dark"] .rw.en .nu{color:#9A9A96}[data-theme="dark"] .rw.en .lc{background:#9A9A96}
+[data-theme="dark"] .rw.in{background:#3A3A37}[data-theme="dark"] .rw.in .nu{color:#B9B7B0}[data-theme="dark"] .rw.in .lc{background:#B9B7B0}
+[data-theme="light"] .rw.id{background:#F2F0E8;border-color:#D3D1C7}[data-theme="light"] .rw.id .nu{color:#5F5E5A}[data-theme="light"] .rw.id .lc{background:#5F5E5A}
+[data-theme="light"] .rw.ed{background:#EFDFCD;border-color:#DEC5A8}[data-theme="light"] .rw.ed .nu{color:#8A5A32}[data-theme="light"] .rw.ed .lc{background:#8A5A32}
+[data-theme="light"] .rw.en{background:#DAE3F2;border-color:#BFCFE6}[data-theme="light"] .rw.en .nu{color:#3B5A8A}[data-theme="light"] .rw.en .lc{background:#3B5A8A}
+[data-theme="light"] .rw.in{background:#E4E9D2;border-color:#CBD5AE}[data-theme="light"] .rw.in .nu{color:#5C6B33}[data-theme="light"] .rw.in .lc{background:#5C6B33}
+.lg{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;justify-content:center}
+.lg span{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--fg-mute)}
+.lg i{width:12px;height:12px;border-radius:3px;border:1.5px solid transparent;display:block}
+[data-theme="dark"] .k-id{background:#FAF9F5}[data-theme="dark"] .k-ed{border-color:#FAF9F5}
+[data-theme="dark"] .k-en{border-color:#6B6B67}[data-theme="dark"] .k-in{background:#3A3A37}
+[data-theme="light"] .k-id{background:#F2F0E8;border-color:#D3D1C7}[data-theme="light"] .k-ed{background:#EFDFCD;border-color:#DEC5A8}
+[data-theme="light"] .k-en{background:#DAE3F2;border-color:#BFCFE6}[data-theme="light"] .k-in{background:#E4E9D2;border-color:#CBD5AE}
+
+@media (prefers-reduced-motion:no-preference){
+  .col-l>*{opacity:0;transform:translateY(8px);animation:up .6s var(--ease) forwards}
+  .col-l>*:nth-child(2){animation-delay:.07s}.col-l>*:nth-child(3){animation-delay:.14s}
+  .col-l>*:nth-child(4){animation-delay:.21s}.col-l>*:nth-child(5){animation-delay:.21s}
+  .viz-frame{opacity:0;animation:up-f .7s var(--ease) .28s forwards}
+  @keyframes up{to{opacity:1;transform:none}}
+  @keyframes up-f{to{opacity:1}}
+}
+
+@media (max-width:860px){
+  .nav{padding-top:18px;padding-bottom:14px}
+  .nav .wm{height:21px}
+  .stage{align-items:flex-start}
+  .split{padding-top:20px;padding-bottom:36px}
+  h1{font-size:clamp(26px,7.4vw,32px)}
+  .sub{font-size:15px}
+  .cta-row{max-width:none}
+  .cta-row input{min-width:0}
+  .cta-row .btn{flex:none;width:100%;text-align:center;padding:13px}
+  @media (min-width:521px){.cta-row .btn{width:auto}}
+  .viz-frame{padding:14px}
+  .viz-inner{padding:14px 12px}
+  .sheet{width:82px}
+  .rw{height:19px}
+  footer{padding-top:14px;padding-bottom:calc(14px + env(safe-area-inset-bottom))}
+}
+
+footer{border-top:1px solid var(--line);padding:16px clamp(20px,4vw,52px);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;flex:none}
+.fsym{height:19px;line-height:0}
+.copyline{font-size:11.5px;color:var(--fg-mute)}
+.controls{display:flex;align-items:center;gap:8px;margin-left:auto}
+.seg{display:flex;align-items:center;gap:2px;padding:2px;border-radius:99px;background:var(--card)}
+.seg button{display:flex;align-items:center;justify-content:center;width:28px;height:28px;padding:0;border:none;border-radius:99px;background:transparent;cursor:pointer;color:var(--fg-mute)}
+.seg button.on{background:var(--card-on);color:var(--fg)}
+.seg svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.lang{position:relative}
+.lang-b{display:flex;align-items:center;gap:6px;height:32px;padding:0 11px;border-radius:99px;border:1px solid var(--ctl);background:transparent;cursor:pointer;font:inherit;font-size:12px;font-weight:500;color:var(--fg-soft)}
+.lang-b .fl{width:13px;height:13px;border-radius:99px;overflow:hidden;display:block}
+.dd{display:none;position:absolute;bottom:calc(100% + 8px);right:0;min-width:136px;padding:4px;border-radius:11px;border:1px solid var(--ctl);background:var(--pop);z-index:10}
+.dd.open{display:block}
+.dd button{display:flex;align-items:center;gap:9px;width:100%;height:31px;padding:0 9px;border:none;border-radius:8px;background:transparent;cursor:pointer;font:inherit;font-size:12px;color:var(--fg);text-align:left}
+.dd button:hover{background:var(--card)}
+.dd .ck{margin-left:auto;visibility:hidden}
+.dd button.on .ck{visibility:visible}
+@media (max-width:520px){.copyline{display:none}}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<defs>
+<linearGradient id="brushed" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#575754"/><stop offset="18%" stop-color="#E8E8E5"/><stop offset="26%" stop-color="#6B6B67"/><stop offset="44%" stop-color="#B0B0AC"/><stop offset="52%" stop-color="#FFFFFF"/><stop offset="60%" stop-color="#9A9A96"/><stop offset="78%" stop-color="#DCDCD8"/><stop offset="86%" stop-color="#63635F"/><stop offset="100%" stop-color="#2E2E2C"/></linearGradient>
+<linearGradient id="oil" x1="0%" y1="10%" x2="100%" y2="90%"><stop offset="0%" stop-color="#170F22"/><stop offset="13%" stop-color="#4A2E68"/><stop offset="26%" stop-color="#8D7EB5"/><stop offset="38%" stop-color="#2E5850"/><stop offset="50%" stop-color="#4E8F88"/><stop offset="63%" stop-color="#B07D4F"/><stop offset="76%" stop-color="#6E4A2E"/><stop offset="88%" stop-color="#3A2650"/><stop offset="100%" stop-color="#12101A"/></linearGradient>
+<path id="sym" d="M103 -259Q82 -259 67.5 -273.5Q53 -288 53 -309Q53 -331 67.5 -344.5Q82 -358 103 -358H291Q312 -358 327.0 -343.5Q342 -329 342 -307Q342 -287 327.0 -273.0Q312 -259 291 -259Z M968 -263Q968 -183 933.0 -121.5Q898 -60 838.0 -25.0Q778 10 703 10Q628 10 568.0 -25.0Q508 -60 472.5 -121.5Q437 -183 437 -263Q437 -344 472.5 -405.5Q508 -467 568.0 -502.5Q628 -538 703 -538Q778 -538 838.0 -502.5Q898 -467 933.0 -405.5Q968 -344 968 -263ZM868 -263Q868 -318 846.0 -358.5Q824 -399 786.5 -422.5Q749 -446 703 -446Q657 -446 619.0 -422.5Q581 -399 559.0 -358.5Q537 -318 537 -263Q537 -210 559.0 -169.0Q581 -128 619.0 -105.0Q657 -82 703 -82Q749 -82 786.5 -105.0Q824 -128 846.0 -169.0Q868 -210 868 -263Z M1119 -1Q1094 -1 1080.5 -15.0Q1067 -29 1067 -54V-72Q1067 -97 1080.5 -111.0Q1094 -125 1119 -125H1130Q1155 -125 1168.0 -111.0Q1181 -97 1181 -72V-54Q1181 -29 1168.0 -15.0Q1155 -1 1130 -1Z M1401 -51Q1401 -29 1387.0 -14.5Q1373 0 1351 0Q1330 0 1315.5 -14.5Q1301 -29 1301 -51V-479Q1301 -501 1315.5 -515.5Q1330 -530 1351 -530Q1373 -530 1387.0 -515.5Q1401 -501 1401 -479ZM1350 -596Q1321 -596 1308.0 -606.5Q1295 -617 1295 -642V-658Q1295 -683 1309.0 -693.0Q1323 -703 1351 -703Q1381 -703 1394.0 -692.5Q1407 -682 1407 -658V-642Q1407 -616 1393.5 -606.0Q1380 -596 1350 -596Z M2040 -263Q2040 -183 2005.0 -121.5Q1970 -60 1910.0 -25.0Q1850 10 1775 10Q1700 10 1640.0 -25.0Q1580 -60 1544.5 -121.5Q1509 -183 1509 -263Q1509 -344 1544.5 -405.5Q1580 -467 1640.0 -502.5Q1700 -538 1775 -538Q1850 -538 1910.0 -502.5Q1970 -467 2005.0 -405.5Q2040 -344 2040 -263ZM1940 -263Q1940 -318 1918.0 -358.5Q1896 -399 1858.5 -422.5Q1821 -446 1775 -446Q1729 -446 1691.0 -422.5Q1653 -399 1631.0 -358.5Q1609 -318 1609 -263Q1609 -210 1631.0 -169.0Q1653 -128 1691.0 -105.0Q1729 -82 1775 -82Q1821 -82 1858.5 -105.0Q1896 -128 1918.0 -169.0Q1940 -210 1940 -263Z"/>
+<path id="wm" d="M63 -520H298Q318 -520 331.5 -506.5Q345 -493 345 -473Q345 -454 331.5 -441.0Q318 -428 298 -428H63Q43 -428 29.5 -441.5Q16 -455 16 -474Q16 -494 29.5 -507.0Q43 -520 63 -520ZM168 -650Q190 -650 204.0 -635.5Q218 -621 218 -599V-135Q218 -117 224.0 -106.0Q230 -95 240.5 -91.0Q251 -87 262 -87Q273 -87 281.5 -91.0Q290 -95 302 -95Q314 -95 324.0 -84.0Q334 -73 334 -54Q334 -30 308.0 -15.0Q282 0 252 0Q235 0 212.0 -3.0Q189 -6 167.5 -18.0Q146 -30 132.0 -56.5Q118 -83 118 -131V-599Q118 -621 132.5 -635.5Q147 -650 168 -650Z M887 -534Q909 -534 923.0 -519.5Q937 -505 937 -483V-51Q937 -29 923.0 -14.5Q909 0 887 0Q866 0 851.5 -14.5Q837 -29 837 -51V-123L858 -120Q858 -102 843.5 -80.0Q829 -58 804.0 -37.5Q779 -17 745.0 -3.5Q711 10 672 10Q603 10 548.0 -25.5Q493 -61 461.0 -123.0Q429 -185 429 -264Q429 -345 461.0 -406.5Q493 -468 547.5 -503.0Q602 -538 669 -538Q712 -538 748.5 -524.0Q785 -510 812.0 -488.0Q839 -466 853.5 -441.5Q868 -417 868 -395L837 -392V-483Q837 -504 851.5 -519.0Q866 -534 887 -534ZM683 -82Q730 -82 766.0 -106.0Q802 -130 822.0 -171.5Q842 -213 842 -264Q842 -316 822.0 -357.0Q802 -398 766.0 -422.0Q730 -446 683 -446Q637 -446 601.5 -422.0Q566 -398 545.5 -357.0Q525 -316 525 -264Q525 -213 545.5 -171.5Q566 -130 601.5 -106.0Q637 -82 683 -82Z M1135 0Q1114 0 1099.5 -14.5Q1085 -29 1085 -51V-689Q1085 -711 1099.5 -725.5Q1114 -740 1135 -740Q1157 -740 1171.0 -725.5Q1185 -711 1185 -689V-51Q1185 -29 1171.0 -14.5Q1157 0 1135 0ZM1461 -528Q1480 -528 1494.0 -512.0Q1508 -496 1508 -480Q1508 -460 1489 -443L1176 -163L1172 -278L1424 -512Q1440 -528 1461 -528ZM1473 -1Q1452 -1 1437 -18L1237 -229L1313 -299L1508 -88Q1524 -71 1524 -50Q1524 -28 1506.5 -14.5Q1489 -1 1473 -1Z M1858 10Q1775 10 1714.0 -24.5Q1653 -59 1619.5 -119.5Q1586 -180 1586 -258Q1586 -346 1621.5 -408.5Q1657 -471 1714.0 -504.5Q1771 -538 1835 -538Q1884 -538 1928.0 -518.5Q1972 -499 2006.5 -464.5Q2041 -430 2061.0 -383.5Q2081 -337 2082 -282Q2081 -262 2066.0 -249.0Q2051 -236 2031 -236H1642L1618 -321H1994L1975 -303V-328Q1973 -363 1952.0 -389.5Q1931 -416 1900.0 -430.5Q1869 -445 1835 -445Q1805 -445 1777.5 -435.5Q1750 -426 1728.5 -405.0Q1707 -384 1694.5 -349.5Q1682 -315 1682 -264Q1682 -209 1705.0 -168.0Q1728 -127 1767.0 -104.5Q1806 -82 1853 -82Q1890 -82 1914.0 -89.5Q1938 -97 1954.0 -108.0Q1970 -119 1982 -129Q1997 -138 2012 -138Q2030 -138 2042.0 -125.5Q2054 -113 2054 -96Q2054 -74 2032 -56Q2005 -30 1957.5 -10.0Q1910 10 1858 10Z M2228 -259Q2207 -259 2192.5 -273.5Q2178 -288 2178 -309Q2178 -331 2192.5 -344.5Q2207 -358 2228 -358H2416Q2437 -358 2452.0 -343.5Q2467 -329 2467 -307Q2467 -287 2452.0 -273.0Q2437 -259 2416 -259Z M3093 -263Q3093 -183 3058.0 -121.5Q3023 -60 2963.0 -25.0Q2903 10 2828 10Q2753 10 2693.0 -25.0Q2633 -60 2597.5 -121.5Q2562 -183 2562 -263Q2562 -344 2597.5 -405.5Q2633 -467 2693.0 -502.5Q2753 -538 2828 -538Q2903 -538 2963.0 -502.5Q3023 -467 3058.0 -405.5Q3093 -344 3093 -263ZM2993 -263Q2993 -318 2971.0 -358.5Q2949 -399 2911.5 -422.5Q2874 -446 2828 -446Q2782 -446 2744.0 -422.5Q2706 -399 2684.0 -358.5Q2662 -318 2662 -263Q2662 -210 2684.0 -169.0Q2706 -128 2744.0 -105.0Q2782 -82 2828 -82Q2874 -82 2911.5 -105.0Q2949 -128 2971.0 -169.0Q2993 -210 2993 -263Z M3244 -1Q3219 -1 3205.5 -15.0Q3192 -29 3192 -54V-72Q3192 -97 3205.5 -111.0Q3219 -125 3244 -125H3255Q3280 -125 3293.0 -111.0Q3306 -97 3306 -72V-54Q3306 -29 3293.0 -15.0Q3280 -1 3255 -1Z M3526 -51Q3526 -29 3512.0 -14.5Q3498 0 3476 0Q3455 0 3440.5 -14.5Q3426 -29 3426 -51V-479Q3426 -501 3440.5 -515.5Q3455 -530 3476 -530Q3498 -530 3512.0 -515.5Q3526 -501 3526 -479ZM3475 -596Q3446 -596 3433.0 -606.5Q3420 -617 3420 -642V-658Q3420 -683 3434.0 -693.0Q3448 -703 3476 -703Q3506 -703 3519.0 -692.5Q3532 -682 3532 -658V-642Q3532 -616 3518.5 -606.0Q3505 -596 3475 -596Z M4165 -263Q4165 -183 4130.0 -121.5Q4095 -60 4035.0 -25.0Q3975 10 3900 10Q3825 10 3765.0 -25.0Q3705 -60 3669.5 -121.5Q3634 -183 3634 -263Q3634 -344 3669.5 -405.5Q3705 -467 3765.0 -502.5Q3825 -538 3900 -538Q3975 -538 4035.0 -502.5Q4095 -467 4130.0 -405.5Q4165 -344 4165 -263ZM4065 -263Q4065 -318 4043.0 -358.5Q4021 -399 3983.5 -422.5Q3946 -446 3900 -446Q3854 -446 3816.0 -422.5Q3778 -399 3756.0 -358.5Q3734 -318 3734 -263Q3734 -210 3756.0 -169.0Q3778 -128 3816.0 -105.0Q3854 -82 3900 -82Q3946 -82 3983.5 -105.0Q4021 -128 4043.0 -169.0Q4065 -210 4065 -263Z"/>
+<g id="fl-us"><rect width="16" height="16" fill="#F0F0F0"/><g fill="#D02F44"><rect y="1.2" width="16" height="1.6"/><rect y="4.4" width="16" height="1.6"/><rect y="7.6" width="16" height="1.6"/><rect y="10.8" width="16" height="1.6"/><rect y="14" width="16" height="1.6"/></g><rect width="8" height="7.2" fill="#3C3B6E"/></g>
+<g id="fl-br"><rect width="16" height="16" fill="#009C3B"/><path d="M8 2.4 14 8 8 13.6 2 8Z" fill="#FFDF00"/><circle cx="8" cy="8" r="2.6" fill="#002776"/></g>
+</defs>
+</svg>
+
+<nav class="nav" aria-label="main">
+  <a class="wm-a" href="/" aria-label="take-o.io">
+    <svg class="wm mark" viewBox="-20 -750 4220 765" role="img" aria-label="take-o.io"><use href="#wm"/></svg>
+  </a>
+  <a class="btn" href="#lista" data-i="cta"></a>
+</nav>
+
+<div class="stage">
+  <div class="split">
+    <div class="col-l">
+      <h1 data-i="h1"></h1>
+      <p class="sub" data-i="sub"></p>
+      <form class="cta-row" id="waitlist" novalidate>
+        <input type="email" name="email" required data-i-ph="ph" aria-label="email">
+        <button class="btn" type="submit" data-i="cta"></button>
+      </form>
+      <p class="micro" data-i="micro"></p>
+      <p class="legal"><a href="/privacy" data-i="legal"></a></p>
+      <p class="form-ok" id="form-ok" data-i="ok"></p>
+    </div>
+
+    <div class="col-r" aria-hidden="true">
+      <div class="viz-frame">
+        <div class="viz-bar"><i></i><i></i><i></i></div>
+        <div class="viz-inner">
+          <div class="viz-in">
+        <div class="sheet">
+          <i class="h" style="width:58%"></i><i class="b" style="width:92%"></i><i class="b" style="width:78%"></i>
+          <i class="c"></i><i class="d" style="width:52%"></i><i class="d" style="width:44%"></i>
+          <i class="h" style="width:64%;margin-top:7px"></i><i class="b" style="width:86%"></i><i class="b" style="width:70%"></i>
+          <i class="c"></i><i class="d" style="width:58%"></i>
+          <i class="h" style="width:50%;margin-top:7px"></i><i class="b" style="width:88%"></i><i class="b" style="width:64%"></i>
+        </div>
+        <div class="rows">
+          <div class="rw id"><span class="nu">01</span><span class="lc" style="width:56%"></span></div>
+          <div class="rw en"><span class="nu">02</span><span class="lc" style="width:40%"></span></div>
+          <div class="rw in"><span class="nu">03</span><span class="lc" style="width:64%"></span></div>
+          <div class="rw ed"><span class="nu">04</span><span class="lc" style="width:47%"></span></div>
+          <div class="rw en"><span class="nu">05</span><span class="lc" style="width:53%"></span></div>
+          <div class="rw id"><span class="nu">06</span><span class="lc" style="width:44%"></span></div>
+        </div>
+          </div>
+          <div class="lg">
+            <span><i class="k-id"></i><b data-i="l-id" style="font-weight:400"></b></span>
+            <span><i class="k-ed"></i><b data-i="l-ed" style="font-weight:400"></b></span>
+            <span><i class="k-en"></i><b data-i="l-en" style="font-weight:400"></b></span>
+            <span><i class="k-in"></i><b data-i="l-in" style="font-weight:400"></b></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <span class="fsym">
+    <svg class="mark" viewBox="-197 -953 2486 1212" style="height:19px" role="img" aria-label="take-o.io"><use href="#sym"/></svg>
+  </span>
+  <span class="copyline">© take-o.io · production intelligence · 2026</span>
+  <div class="controls">
+    <div class="seg" role="group" aria-label="theme">
+      <button data-m="system" aria-label="System theme"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg></button>
+      <button data-m="light" aria-label="Light theme"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.4"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M19.1 4.9l-1.8 1.8M6.7 17.3l-1.8 1.8"/></svg></button>
+      <button data-m="dark" aria-label="Dark theme"><svg viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></svg></button>
+    </div>
+    <div class="lang">
+      <button class="lang-b" id="lang-b" aria-haspopup="listbox" aria-expanded="false">
+        <svg class="fl" viewBox="0 0 16 16"><clipPath id="fc"><circle cx="8" cy="8" r="8"/></clipPath><g clip-path="url(#fc)"><use id="fl-use" href="#fl-us"/></g></svg>
+        <span id="lang-lb">English</span>
+        <svg width="10" height="10" viewBox="0 0 24 24" style="stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round"><path d="m6 14 6-6 6 6"/></svg>
+      </button>
+      <div class="dd" id="dd" role="listbox">
+        <button data-l="en" role="option"><svg class="fl" width="13" height="13" viewBox="0 0 16 16"><clipPath id="fc2"><circle cx="8" cy="8" r="8"/></clipPath><g clip-path="url(#fc2)"><use href="#fl-us"/></g></svg>English<span class="ck">✓</span></button>
+        <button data-l="pt" role="option"><svg class="fl" width="13" height="13" viewBox="0 0 16 16"><clipPath id="fc3"><circle cx="8" cy="8" r="8"/></clipPath><g clip-path="url(#fc3)"><use href="#fl-br"/></g></svg>Português<span class="ck">✓</span></button>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+const I18N = {
+  en: {
+    cta:"Join waitlist", ph:"your work email",
+    h1:"From script to budget. Scene by scene, line by line. In minutes.",
+    sub:"With take-o.io, breakdown and technical analysis cover the entire script. Every scene, every element. Less time, less effort. More control over every decision, from page to set.",
+    micro:"Early access by invitation · piloting with selected production companies",
+    legal:"Privacy Notice",
+    ok:"You're on the list. We'll be in touch when the next round of invitations opens.",
+    "l-id":"INT · DAY","l-ed":"EXT · DAY","l-en":"EXT · NIGHT","l-in":"INT · NIGHT",
+    title:"take-o.io — production intelligence for film and TV",
+    desc:"AI platform that turns screenplays into structured production data. Automatic script breakdown and technical analysis for production companies. Early access."
+  },
+  pt: {
+    cta:"Entrar na lista", ph:"seu e-mail de trabalho",
+    h1:"Do roteiro ao orçamento. Cena por cena, linha por linha. Em minutos.",
+    sub:"Com a take-o.io, a decupagem e a análise técnica cobrem o roteiro inteiro. Cada cena, cada elemento. Menos tempo, menos esforço. Mais controle sobre cada decisão, do papel ao set.",
+    micro:"Acesso antecipado por convite · piloto com produtoras selecionadas",
+    legal:"Aviso de Privacidade",
+    ok:"Você está na lista. Entramos em contato quando abrir a próxima leva de convites.",
+    "l-id":"INT · DIA","l-ed":"EXT · DIA","l-en":"EXT · NOITE","l-in":"INT · NOITE",
+    title:"take-o.io — inteligência para produção audiovisual",
+    desc:"Plataforma de IA que transforma roteiros em dados operacionais de produção. Decupagem automática e análise técnica para produtoras. Acesso antecipado."
+  }
+};
+// Doutrina: site/hero é "momento de impacto" (Manual v2, mapa de aplicações) — não segue o SO por padrão.
+// Página única (uma dobra): não fragmenta hero/conteúdo, então dá pra fixar o padrão sem contradição.
+// "Sistema" continua disponível como opção manual pra quem preferir seguir o dispositivo.
+let lang = localStorage.getItem('lang') || 'en';
+let theme = localStorage.getItem('theme') || 'dark';
+const mq = window.matchMedia('(prefers-color-scheme: dark)');
+
+function applyLang(){
+  const d = I18N[lang];
+  document.documentElement.lang = lang === 'pt' ? 'pt-BR' : 'en';
+  document.title = d.title;
+  document.querySelector('meta[name="description"]').setAttribute('content', d.desc);
+  document.querySelectorAll('[data-i]').forEach(e => e.textContent = d[e.dataset.i]);
+  document.querySelectorAll('[data-i-ph]').forEach(e => e.placeholder = d[e.dataset.iPh]);
+  document.getElementById('lang-lb').textContent = lang==='pt' ? 'Português' : 'English';
+  document.getElementById('fl-use').setAttribute('href', lang==='pt' ? '#fl-br' : '#fl-us');
+  document.querySelectorAll('#dd button').forEach(b => b.classList.toggle('on', b.dataset.l===lang));
+}
+function applyTheme(){
+  const eff = theme==='system' ? (mq.matches ? 'dark' : 'light') : theme;
+  document.documentElement.dataset.theme = eff;
+  void document.documentElement.offsetHeight; // força reflow — corrige repaint preso em iOS/WebKit
+  document.querySelectorAll('.viz-frame,.viz-inner').forEach(el => { el.style.display='none'; void el.offsetHeight; el.style.display=''; });
+  document.querySelectorAll('.seg button').forEach(b => b.classList.toggle('on', b.dataset.m===theme));
+}
+document.querySelectorAll('.seg button').forEach(b => b.addEventListener('click', () => {
+  theme = b.dataset.m; localStorage.setItem('theme', theme); applyTheme();
+}));
+mq.addEventListener('change', () => { if(theme==='system') applyTheme(); });
+
+const dd = document.getElementById('dd'), lb = document.getElementById('lang-b');
+lb.addEventListener('click', e => { e.stopPropagation(); dd.classList.toggle('open'); lb.setAttribute('aria-expanded', dd.classList.contains('open')); });
+document.addEventListener('click', () => { dd.classList.remove('open'); lb.setAttribute('aria-expanded','false'); });
+document.querySelectorAll('#dd button').forEach(b => b.addEventListener('click', () => {
+  lang = b.dataset.l; localStorage.setItem('lang', lang); applyLang();
+}));
+
+document.getElementById('waitlist').addEventListener('submit', async e => {
+  e.preventDefault();
+  const form = e.target, email = form.email.value.trim(), btn = form.querySelector('button');
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ form.email.focus(); return; }
+  btn.disabled = true; btn.textContent = lang==='pt' ? 'Enviando…' : 'Sending…';
+  try { await fetch('/api/subscribe', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({email, lang})}); } catch(_){}
+  form.style.display='none';
+  document.querySelector('.micro').style.display='none';
+  document.querySelector('.legal').style.display='none';
+  document.getElementById('form-ok').style.display='block';
+});
+
+applyLang(); applyTheme();
+
+// Loop da ilustração: varredura de leitura linha a linha da folha, gerando a tabela em simultâneo.
+if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  const sheetLines = Array.from(document.querySelectorAll('.sheet i'));
+  const rows = Array.from(document.querySelectorAll('.rw'));
+  const n = sheetLines.length;
+  const STEP = 9;
+  const READ = n * STEP;
+  const HOLD = 90, CYCLE = READ + HOLD + 30;
+  const birth = [3, 5, 7, 9, 11, 13].map(k => k * STEP);
+  let t = 0;
+  setInterval(() => {
+    t = (t + 1) % CYCLE;
+    const pos = Math.min(Math.floor(t / STEP), n);
+    const on = t < READ + HOLD;
+    sheetLines.forEach((e, i) => e.classList.toggle('lit', on && i < pos));
+    rows.forEach((e, i) => e.classList.toggle('lit', on && t > birth[i]));
+  }, 30);
+} else {
+  document.querySelectorAll('.rw, .sheet i').forEach(e => e.classList.add('lit'));
+}
+</script>
+</body>
+</html>
